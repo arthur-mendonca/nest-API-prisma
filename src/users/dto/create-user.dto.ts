@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import { IsBoolean, IsEmail, IsNotEmpty, IsString } from "class-validator";
+import { IsBoolean, IsEmail, IsNotEmpty, IsOptional, IsString } from "class-validator";
 
 export class CreateUserDto {
   @IsEmail()
@@ -11,5 +11,6 @@ export class CreateUserDto {
   name: string;
   
   @IsBoolean()
+  @IsOptional()
   admin: boolean;
 }
