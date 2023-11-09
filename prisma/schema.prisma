@@ -16,7 +16,7 @@ model User {
   name      String
   admin     Boolean  @default(false)
   createdAt DateTime @default(now())
-  posts      Post[]
+  posts     Post[]
 
   @@map("users")
 }
@@ -28,7 +28,7 @@ model Post {
   content   String?
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now())
-  author    User     @relation(fields: [authorId], references: [id])
+  author    User     @relation(fields: [authorId], references: [id], onDelete: Cascade)
   authorId  Int
 
   @@map("posts")

@@ -105,9 +105,8 @@ export class PostsRepository {
   }
 
   async remove(id: number) {
-    const post = await this.prisma.post.delete({
+    await this.prisma.post.delete({
       where: { id },
     });
-    return post;
   }
 }

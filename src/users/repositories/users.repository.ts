@@ -16,7 +16,17 @@ export class UsersRepository {
   }
 
   async findAll() {
-    const user = await this.prisma.user.findMany();
+    const user = await this.prisma.user.findMany({
+      include: {
+        posts: {
+          select: {
+            title: true,
+            published: true,
+            createdAt: true,
+          },
+        },
+      },
+    });
     return user;
   }
 
@@ -36,10 +46,10 @@ export class UsersRepository {
   }
 
   async remove(id: number) {
-    const user = await this.prisma.user.delete({
+    await this.prisma.user.delete({
       where: { id },
     });
-    return user;
+    return;
   }
 }
 
