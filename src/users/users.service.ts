@@ -1,15 +1,14 @@
 /* eslint-disable prettier/prettier */
-import { Injectable } from '@nestjs/common';
-import { CreateUserDto } from './dto/create-user.dto';
-import { UpdateUserDto } from './dto/update-user.dto';
-import { UsersRepository } from './repositories/users.repository';
-import { NotFoundError } from 'src/common/errors/types/NotFoundError';
-import { UserEntity } from './entities/user.entity';
+import { Injectable, NotFoundException } from "@nestjs/common";
+import { CreateUserDto } from "./dto/create-user.dto";
+import { UpdateUserDto } from "./dto/update-user.dto";
+import { UsersPrismaRepository } from "./repositories/prisma/users.prisma.repository";
+import { NotFoundError } from "src/common/errors/types/NotFoundError";
+import { UserEntity } from "./entities/user.entity";
 
 @Injectable()
 export class UsersService {
-
-  constructor(private readonly repository: UsersRepository){}
+  constructor(private readonly repository: UsersPrismaRepository) {}
 
   async create(createUserDto: CreateUserDto) {
     return await this.repository.create(createUserDto);
@@ -19,11 +18,11 @@ export class UsersService {
     return this.repository.findAll();
   }
 
-  async findOne(id: number):Promise<UserEntity> {
+  async findOne(id: number): Promise<UserEntity> {
     const user = await this.repository.findOne(id);
 
-    if(!user) {
-      throw new NotFoundError("Usuário não encontrado.")
+    if (!user) {
+      throw new NotFoundError("Usuário não encontrado.");
     }
     return user;
   }
@@ -34,5 +33,14 @@ export class UsersService {
 
   remove(id: number) {
     return this.repository.remove(id);
+  }
+
+  async findByEmail(email: string) {
+    const findUser = await this.repository.findByEmail(email);
+
+    if (!findUser) {
+      throw new NotFoundException("User with this e-mail not found");
+    }
+    return findUser;
   }
 }
